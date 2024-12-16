@@ -1,0 +1,349 @@
+import 'package:flutter/material.dart';
+
+// Entry point of the Flutter app
+void main() {
+  runApp(MyApp()); // Runs the MyApp widget
+}
+
+// Main widget of the app
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false, // Disables the debug banner in the app
+      home: LoginPage(), // Sets LoginPage as the home screen
+    );
+  }
+}
+
+// LoginPage widget which is stateful to manage user input and state
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() =>
+      _LoginPageState(); // Creates the state for LoginPage
+}
+
+// State class for LoginPage
+class _LoginPageState extends State<LoginPage> {
+  final _formKey =
+      GlobalKey<FormState>(); // Key to identify the form and validate its state
+  final TextEditingController _emailController =
+      TextEditingController(); // Controller for the email text field
+  final TextEditingController _passwordController =
+      TextEditingController(); // Controller for the password text field
+
+  // Function to handle login action
+  void _login() {
+    if (_formKey.currentState!.validate()) {
+      // Validates the form inputs
+      String email =
+          _emailController.text; // Retrieves the email from the controller
+      String password = _passwordController
+          .text; // Retrieves the password from the controller
+
+      // Navigates to a new page after successful login
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => WelcomePage(), // Navigates to WelcomePage
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login Page'), // Title of the app bar
+        backgroundColor:
+            Colors.redAccent, // Sets the background color of the app bar
+      ),
+      body: Container(
+        color: Colors.black,
+        child: Padding(
+            padding: const EdgeInsets.all(16.0), // Padding around the form
+            child: Form(
+              key: _formKey, // Associates the form with the key for validation
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment
+                    .center, // Centers the form elements vertically
+                children: [
+                  Image.asset(
+                    'assets/logo.png',
+                    width: 100,
+                    height: 100,
+                  ),
+                  SizedBox(
+                    height: 24.0,
+                  ),
+
+                  // Email text field
+                  TextFormField(
+                    controller:
+                        _emailController, // Binds the text field to the email controller
+                    keyboardType: TextInputType
+                        .emailAddress, // Specifies the input type as email
+                    decoration: InputDecoration(
+                      labelText: 'Email', // Label for the text field
+                      border:
+                          OutlineInputBorder(), // Adds an outline around the text field
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        // Checks if the field is empty
+                        return 'Please enter your email'; // Error message if empty
+                      } else if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
+                          .hasMatch(value)) {
+                        // Corrected regex for email validation
+                        return 'Please enter a valid email'; // Error message for invalid email format
+                      }
+                      return null; // Returns null if no errors
+                    },
+                  ),
+                  SizedBox(
+                      height:
+                          16.0), // Adds space between the email and password fields
+                  // Password text field
+                  TextFormField(
+                    controller:
+                        _passwordController, // Binds the text field to the password controller
+                    obscureText: true, // Hides the input text for security
+                    decoration: InputDecoration(
+                      labelText: 'Password', // Label for the text field
+                      border:
+                          OutlineInputBorder(), // Adds an outline around the text field
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        // Checks if the field is empty
+                        return 'Please enter your password'; // Error message if empty
+                      }
+                      return null; // Returns null if no errors
+                    },
+                  ),
+                  SizedBox(height: 24.0), // Adds space before the login button
+                  // Login button
+                  ElevatedButton(
+                    onPressed: _login, // Calls the _login function when pressed
+                    child: Text('Login'), // Text displayed on the button
+                  ),
+                  // Forgot Password button
+                  TextButton(
+                    onPressed: () {
+                      // TODO: Navigate to forgot password page
+                      print(
+                          'Forgot Password?'); // Prints a message to the console (placeholder action)
+                    },
+                    child: Text(
+                        'Forgot Password?'), // Text displayed on the button
+                  ),
+                ],
+              ),
+            )),
+      ),
+    );
+  }
+}
+
+// WelcomePage widget which displays a hello message
+class WelcomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Sample data for emergency blood requests
+    final emergencyRequests = [
+      {
+        'name': 'Mohammad Adnan',
+        'bloodType': 'O+',
+        'contact': '01729998600',
+        'hospital': 'City Hospital'
+      },
+      {
+        'name': 'Oditto Akash Dhrubo',
+        'bloodType': 'A+',
+        'contact': '01723456789',
+        'hospital': 'Central Hospital'
+      },
+      {
+        'name': 'Sanjida Amin Erin',
+        'bloodType': 'B+',
+        'contact': '017123456789',
+        'hospital': 'Central Hospital'
+      },
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Welcome Page'),
+        backgroundColor: Colors.redAccent,
+      ),
+      body: Column(
+        children: [
+          SizedBox(height: 16.0), // Space below the AppBar
+          // Row with boxes and labels underneath
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              {'label': 'Donate Blood', 'icon': Icons.bloodtype},
+              {'label': 'Search Blood', 'icon': Icons.search},
+              {'label': 'Tips', 'icon': Icons.lightbulb},
+              {'label': 'Your Account', 'icon': Icons.person},
+            ].map((item) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 80.0,
+                    height: 80.0,
+                    decoration: BoxDecoration(
+                      color: Colors.redAccent,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Icon(
+                      item['icon'] as IconData,
+                      size: 40.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 8.0),
+                  Text(
+                    item['label'] as String,
+                    style: TextStyle(
+                      color: Colors.redAccent,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.0,
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
+          ),
+          SizedBox(height: 24.0), // Space below the boxes
+          Text(
+            'Welcome to the app!',
+            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 24.0), // Space below the welcome message
+          // Slideshow for emergency blood requests
+          EmergencyRequestsSlideshow(emergencyRequests: emergencyRequests),
+        ],
+      ),
+    );
+  }
+}
+
+class EmergencyRequestsSlideshow extends StatefulWidget {
+  final List<Map<String, String>> emergencyRequests; // List of requests
+
+  EmergencyRequestsSlideshow(
+      {required this.emergencyRequests}); // Constructor to accept emergency requests
+
+  @override
+  _EmergencyRequestsSlideshowState createState() =>
+      _EmergencyRequestsSlideshowState(); // Creates the state for this widget
+}
+
+class _EmergencyRequestsSlideshowState
+    extends State<EmergencyRequestsSlideshow> {
+  final PageController _pageController =
+      PageController(); // Controller for the PageView
+  int _currentPage = 0; // Tracks the current page index
+
+  // Function to navigate to the next page
+  void _nextPage() {
+    if (_currentPage < widget.emergencyRequests.length - 1) {
+      // Ensures the next page exists
+      _pageController.nextPage(
+        duration: Duration(milliseconds: 300), // Duration of the animation
+        curve: Curves.easeIn, // Animation curve
+      );
+    }
+  }
+
+  // Function to navigate to the previous page
+  void _previousPage() {
+    if (_currentPage > 0) {
+      // Ensures the previous page exists
+      _pageController.previousPage(
+        duration: Duration(milliseconds: 300), // Duration of the animation
+        curve: Curves.easeIn, // Animation curve
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 150.0, // Height of the slideshow container
+          child: PageView.builder(
+            controller: _pageController, // Attaches the PageView controller
+            onPageChanged: (index) {
+              // Updates the current page index
+              setState(() {
+                _currentPage = index; // Updates the current page
+              });
+            },
+            itemCount: widget.emergencyRequests.length, // Number of cards
+            itemBuilder: (context, index) {
+              final request =
+                  widget.emergencyRequests[index]; // Retrieves current request
+              return Card(
+                color: Colors.redAccent.shade100, // Card background color
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0), // Rounded corners
+                ),
+                elevation: 5.0, // Elevation for shadow effect
+                margin: EdgeInsets.symmetric(
+                    horizontal: 16.0), // Margin around the card
+                child: Padding(
+                  padding:
+                      const EdgeInsets.all(16.0), // Padding inside the card
+                  child: Column(
+                    mainAxisAlignment:
+                        MainAxisAlignment.center, // Centers content vertically
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start, // Aligns content to the start
+                    children: [
+                      Text(
+                        'Name: ${request['name']}', // Displays patient's name
+                        style: TextStyle(
+                          fontSize: 16.0, // Font size for the text
+                          fontWeight: FontWeight.bold, // Makes text bold
+                        ),
+                      ),
+                      Text(
+                          'Blood Type: ${request['bloodType']}'), // Displays blood type
+                      Text(
+                          'Contact: ${request['contact']}'), // Displays contact number
+                      Text(
+                          'Hospital: ${request['hospital']}'), // Displays hospital name
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        SizedBox(height: 16.0), // Space below the slideshow
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center, // Centers the buttons
+          children: [
+            IconButton(
+              onPressed:
+                  _previousPage, // Calls function to go to the previous page
+              icon: Icon(Icons.arrow_back), // Back arrow icon
+              color: Colors.redAccent, // Icon color
+            ),
+            IconButton(
+              onPressed: _nextPage, // Calls function to go to the next page
+              icon: Icon(Icons.arrow_forward), // Forward arrow icon
+              color: Colors.redAccent, // Icon color
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}

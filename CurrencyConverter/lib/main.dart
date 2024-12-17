@@ -8,6 +8,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Currency Converter',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -28,9 +29,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _australianDollarController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _bangladeshiTakaController =
-      TextEditingController();
+  TextEditingController();
 
   final FocusNode _audFocusNode = FocusNode();
   final FocusNode _bdtFocusNode = FocusNode();
@@ -93,17 +94,19 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 _buildTimeContainer(
                   context,
-                  'Sydney (GMT+5)',
-                  Colors.purple,
-                  Colors.pinkAccent,
-                  offset: 5,
-                ),
-                _buildTimeContainer(
-                  context,
                   'Dhaka',
                   Colors.blue,
                   Colors.cyan,
                   offset: 0,
+
+
+                ),
+                _buildTimeContainer(
+                  context,
+                  'Sydney (GMT+5)',
+                  Colors.purple,
+                  Colors.pinkAccent,
+                  offset: 5,
                 ),
               ],
             ),
@@ -126,12 +129,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildTimeContainer(
-    BuildContext context,
-    String label,
-    Color startColor,
-    Color endColor, {
-    required int offset,
-  }) {
+      BuildContext context,
+      String label,
+      Color startColor,
+      Color endColor, {
+        required int offset,
+      }) {
     return Container(
       width: 120,
       height: 120,
@@ -147,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: StreamBuilder<DateTime>(
           stream: Stream.periodic(
             const Duration(seconds: 1),
-            (_) => DateTime.now().add(Duration(hours: offset)),
+                (_) => DateTime.now().add(Duration(hours: offset)),
           ),
           builder: (context, snapshot) {
             final currentTime = snapshot.data ?? DateTime.now();
@@ -190,7 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
         style: const TextStyle(color: Colors.white),
         keyboardType: TextInputType.number,
         onChanged: (value) =>
-            focusNode == _audFocusNode ? _convertCurrency() : _convertToAUD(),
+        focusNode == _audFocusNode ? _convertCurrency() : _convertToAUD(),
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: const TextStyle(color: Colors.white54),
